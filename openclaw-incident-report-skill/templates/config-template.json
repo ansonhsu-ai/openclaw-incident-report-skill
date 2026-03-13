@@ -1,0 +1,51 @@
+{
+  "company_name": "Taiwan Default Company",
+  "receiving_agency": "數位發展部",
+  "report_date": "YYYY-MM-DD",
+  "report_time": "HH:MM",
+  "reporter": {
+    "name": "Reporter Name",
+    "title": "Security Title",
+    "phone": "0900-000000",
+    "email": "security@company.com",
+    "address": "Company Address"
+  },
+  "incident_date": "YYYY-MM-DD",
+  "incident_type": "其他",
+  "incident_type_note": "Incident Description",
+  "records_affected": "Estimation of total affected records",
+  "general_records": 0,
+  "special_records": 0,
+  "cause_summary": "請參考底部附錄",
+  "damage": "Damage Details",
+  "possible_consequences": "Possible Consequences",
+  "countermeasures": "請參考底部附錄",
+  "notification_plan": "Notification Plan",
+  "within_72_hours": true,
+  "within_72_hours_reason": "",
+  "appendix": {
+    "title": "Incident Root Cause and Timeline",
+    "doc_nature": "資安事件通報說明",
+    "sections": {
+      "summary": "Full event summary...",
+      "relation": "Relation to company...",
+      "relation_conclusion": "Conclusion...",
+      "relation_details": [
+        "Detail 1",
+        "Detail 2"
+      ],
+      "timeline": [
+        ["YYYY/MM/DD HH:MM", "Event 1"],
+        ["YYYY/MM/DD HH:MM", "Event 2"]
+      ],
+      "conclusions": [
+        "Conclusion 1",
+        "Conclusion 2"
+      ],
+      "follow_up": [
+        "Follow-up 1",
+        "Follow-up 2"
+      ]
+    }
+  }
+}

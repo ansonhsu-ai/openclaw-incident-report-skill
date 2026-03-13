@@ -18,25 +18,28 @@ Use this skill when the user asks to:
 - Respond to a data breach notification requirement
 - Create a 個人資料侵害事故通報 document
 
-## Execution Constraints & Workflow
+## Execution Constraints & Workflow (Strict Mode)
 
-To maintain air-tight privacy and security, OpenClaw **MUST** execute the following steps locally on the user's machine before doing any LLM-powered content generation:
+To maintain air-tight privacy and security, OpenClaw **MUST** execute the following steps locally in **Strict mode** before invoking any LLM text generation capabilities:
 
-### 1. Mandatory Local Sanitization
-If the user provides raw incident logs, notes, or tickets that contain sensitive information (emails, phone numbers, IP addresses, credentials, UUIDs):
-- **Do not send this content directly to the LLM context.**
+### 1. Local Intake & Sanitization Orchestration
+If the user provides raw incident logs, notes, or tickets:
+- **Never ingest this content directly into the context window.**
 - Request the user to save the raw notes to a local text file, e.g., `examples/raw-incident.txt`.
-- Run the local Python sanitization script:
+- Run the localized strict intake workflow script:
   ```bash
-  python3 scripts/sanitize.py -i examples/raw-incident.txt -o examples/sanitized-incident.txt
+  python3 scripts/intake_workflow.py -i examples/raw-incident.txt -o examples/sanitized-incident.txt
   ```
-- This script uses deterministic regular expressions to replace identifiers with tags like `[REDACTED_EMAIL]`, `[REDACTED_IP]`, etc.
-- Only ingest and summarize the *sanitized* content file (`sanitized-incident.txt`) into context for subsequent drafting.
+- This orchestration script will:
+  1. Call `scripts/sanitize.py` to deterministically mask values with `[REDACTED_EMAIL]`, `[REDACTED_SECRET_VALUE]`, etc.
+  2. Call `scripts/review_sanitized.py` to scan the result for missed heuristics or unredacted tokens.
+- **Stop unconditionally** if `intake_workflow.py` fails or warns about leftover sensitive content.
+- If it returns "SUCCESS", you may now ingest the `sanitized-incident.txt` file.
 
 ### 2. Drafting the Configuration JSON
-Read the strictly-sanitized context. Engage the LLM capability to draft the final report narrative and fill out the structured format required by the report generator. Let OpenClaw write a configuration JSON (e.g., `config.json`).
+Read the successfully sanitized context. Engage the LLM capability to draft the final report narrative and fill out the structured format required by the report generator. Let OpenClaw write a configuration JSON (e.g., `config.json`).
 
-The final configuration schema requires providing an `appendix` section outlining the event timeline, architecture, procedures, and follow-up measures. (See `examples/example-config.json` for reference.)
+The final configuration schema requires providing an `appendix` section outlining the event timeline, architecture, procedures, and follow-up measures. (Use the `templates/config-template.json` or `examples/example-config.json` for reference.)
 
 ### 3. Generate Report Locally
 Once the JSON configuration is fully drafted and approved by the user, invoke the document generator:
