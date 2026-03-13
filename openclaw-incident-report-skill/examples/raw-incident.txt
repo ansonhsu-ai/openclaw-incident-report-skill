@@ -1,0 +1,17 @@
+Urgent Incident Notes
+Date: 2026-03-12
+Reporter: John Doe (john.doe@company.local)
+Phone: 0912-345678
+
+A potential breach was identified. The attacker used the IP address 192.168.1.100 and managed to extract a token:
+Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+
+We also found this UUID 123e4567-e89b-12d3-a456-426614174000 and MAC address 00:1A:2B:3C:4D:5E in the logs.
+Another affected user had the ID Card A123456789.
+
+Please write a report detailing how we will rotate these leaked configs:
+secret="mySuperSecretKey123"
+api_token="ABCDEF123456789"
+apiKey: xyz-987654321
+credentials=aws-secret-key-12345
+password = "myStupidPassword"

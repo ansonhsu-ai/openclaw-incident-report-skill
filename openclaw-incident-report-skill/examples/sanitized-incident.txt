@@ -1,0 +1,17 @@
+Urgent Incident Notes
+Date: 2026-03-12
+Reporter: John Doe ([REDACTED_EMAIL])
+Phone: [REDACTED_PHONE]
+
+A potential breach was identified. The attacker used the IP address [REDACTED_IP] and managed to extract a token:
+[REDACTED_SECRET_VALUE] [REDACTED_TOKEN]
+
+We also found this UUID [REDACTED_UUID] and MAC address [REDACTED_MAC] in the logs.
+Another affected user had the ID Card [REDACTED_ID_CARD].
+
+Please write a report detailing how we will rotate these leaked configs:
+secret="[REDACTED_SECRET_VALUE]"
+api_token="[REDACTED_SECRET_VALUE]"
+apiKey: [REDACTED_SECRET_VALUE]
+credentials=[REDACTED_SECRET_VALUE]
+password = "[REDACTED_SECRET_VALUE]"
