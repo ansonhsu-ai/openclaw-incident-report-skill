@@ -1,0 +1,3 @@
+[submodule "reference-upstream"]
+	path = reference-upstream
+	url = https://github.com/OEN-Tech/incident-report-skill.git
