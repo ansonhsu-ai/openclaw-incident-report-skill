@@ -22,7 +22,7 @@ Use this skill when the user asks to:
 
 To maintain air-tight privacy and security, OpenClaw **MUST** execute the following steps locally in **Strict mode** before invoking any LLM text generation capabilities:
 
-### 1. Local Intake & Sanitization Orchestration
+### 1A. Local Intake & Sanitization Orchestration (Strict Mode)
 If the user provides raw incident logs, notes, or tickets:
 - **Never ingest this content directly into the context window.**
 - Request the user to save the raw notes to a local text file, e.g., `examples/raw-incident.txt`.
@@ -35,6 +35,17 @@ If the user provides raw incident logs, notes, or tickets:
   2. Call `scripts/review_sanitized.py` to scan the result for missed heuristics or unredacted tokens.
 - **Stop unconditionally** if `intake_workflow.py` fails or warns about leftover sensitive content.
 - If it returns "SUCCESS", you may now ingest the `sanitized-incident.txt` file.
+
+### 1B. Local Intake via Direct Paste Mode
+If the user pastes raw incident logs directly into the chat prompt:
+- **Do not use the raw pasted text for downstream drafting or summarization.** Treat it only as intake material for the local sanitization pipeline.
+- Immediately execute the direct paste helper script, feeding it the content:
+  ```bash
+  python3 scripts/direct_paste_intake.py --text "RAW_PASTED_TEXT_HERE"
+  ```
+- This script writes the pasted content to a local raw file (`examples/raw-pasted.txt`) and then automatically routes it through the standard Strict Mode sanitization checks.
+- If it returns "SUCCESS", continue the workflow using only the generated sanitized file (`examples/sanitized-pasted.txt`) for later drafting and report preparation.
+- Do not re-use or re-quote the raw pasted text in later prompt construction when a sanitized version is available.
 
 ### 2. Drafting the Configuration JSON
 Read the successfully sanitized context. Engage the LLM capability to draft the final report narrative and fill out the structured format required by the report generator. Let OpenClaw write a configuration JSON (e.g., `config.json`).

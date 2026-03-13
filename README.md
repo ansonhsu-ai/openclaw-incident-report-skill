@@ -51,11 +51,21 @@ The project contains a valid OpenClaw skill implementation under:
 
 ## Recommended operating flow
 
-1. Save raw incident notes locally
-2. Run local sanitization first
-3. Use only sanitized content for any LLM-assisted drafting
-4. Produce the final JSON/config content
-5. Generate the final `.docx` locally
+To maintain privacy and prevent secret leakage to LLMs, OpenClaw operates under two sanctioned workflows:
+
+### Strict Mode (File-based)
+1. User saves raw incident notes locally to `examples/raw-incident.txt`.
+2. OpenClaw runs the orchestration: `python3 scripts/intake_workflow.py -i <input> -o <output>`
+3. The raw file is sanitized deterministically and safety-reviewed.
+4. If clean, OpenClaw only reads the sanitized result to draft the configuration payload.
+
+### Direct Paste Mode (Chat-based)
+1. User pastes raw incident notes directly into the chat prompt.
+2. OpenClaw immediately feeds the raw text into `scripts/direct_paste_intake.py --text "RAW_TEXT"`.
+3. The script writes the text locally, runs sanitization, and saves to `examples/sanitized-pasted.txt`.
+4. OpenClaw must treat the pasted raw text only as intake material and continue later drafting with the localized sanitized result instead of reusing the raw pasted content.
+
+After either workflow completes, OpenClaw generates the final `.docx` using `scripts/generate.py` alongside the drafted config.
 
 ## Example usage
 
@@ -97,6 +107,7 @@ rsync -a ./openclaw-incident-report-skill/ ~/.openclaw/workspace/skills/incident
 This project has been validated for:
 - skill structure validity
 - local sanitization behavior
+- direct paste intake behavior
 - packaged `.skill` generation
 - successful `.docx` output generation
 
